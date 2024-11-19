@@ -1,12 +1,12 @@
 package com.jsonplaceholder.test.endpoints;
 
 import com.jsonplaceholder.test.data.Post;
+import com.jsonplaceholder.test.utils.TestHelpers;
+import com.jsonplaceholder.test.utils.TestHelpers.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -17,7 +17,6 @@ public class PostsTest {
     @BeforeClass
     public static void setUp() {
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
-//        RestAssured.defaultParser = io.restassured.parsing.Parser.JSON;
     }
 
     @Test
@@ -54,12 +53,8 @@ public class PostsTest {
     }
 
     @Test
-    public void testPostNewPost() {
-        Post post = Post.builder()
-                .userId(1)
-                .title("new post")
-                .body("new post body")
-                .build();
+    public void testCreateNewPost() {
+        Post post = TestHelpers.postBuilder(1, "new post", "new post body");
 
         Response response =
                 given()
@@ -77,5 +72,10 @@ public class PostsTest {
         assertThat(newPost.getUserId()).isEqualTo(post.getUserId());
         assertThat(newPost.getTitle()).isEqualTo(post.getTitle());
         assertThat(newPost.getBody()).isEqualTo(post.getBody());
+    }
+
+    @Test
+    public void testPatchNewPost() {
+
     }
 }
