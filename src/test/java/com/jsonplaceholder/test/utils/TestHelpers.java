@@ -11,4 +11,13 @@ public class TestHelpers {
                 .body(body)
                 .build();
     }
+
+    public static Post postBuilder(int id, int userId, String title, String body) {
+        return Post.builder()
+                .id(id)
+                .userId(userId)
+                .title(title)
+                .body(body)
+                .build();
+    }
 }

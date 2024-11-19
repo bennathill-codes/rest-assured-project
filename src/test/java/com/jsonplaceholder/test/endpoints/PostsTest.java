@@ -74,7 +74,24 @@ public class PostsTest {
     }
 
     @Test
-    public void testPatchNewPost() {
+    public void testPatchPost() {
+        Post post = TestHelpers.postBuilder(1,1, "patch post", "patch post body");
 
+        Response response =
+                given()
+                    .header("Content-Type", "application/json")
+                    .body(post)
+                .when()
+                    .patch("/posts/100")
+                .then()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        Post patchPost = response.getBody().as(Post.class);
+        assertThat(patchPost.getId()).isNotZero();
+        assertThat(patchPost.getUserId()).isEqualTo(post.getUserId());
+        assertThat(patchPost.getTitle()).isEqualTo(post.getTitle());
+        assertThat(patchPost.getBody()).isEqualTo(post.getBody());
     }
 }
