@@ -2,7 +2,6 @@ package com.jsonplaceholder.test.endpoints;
 
 import com.jsonplaceholder.test.data.Post;
 import com.jsonplaceholder.test.utils.TestHelpers;
-import com.jsonplaceholder.test.utils.TestHelpers.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.BeforeClass;
