@@ -6,15 +6,18 @@ import io.restassured.response.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Random;
+
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetEndpointsTest {
+public class PostsTest {
 
     @BeforeClass
     public static void setUp() {
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
-        RestAssured.defaultParser = io.restassured.parsing.Parser.JSON;
+//        RestAssured.defaultParser = io.restassured.parsing.Parser.JSON;
     }
 
     @Test
@@ -44,21 +47,35 @@ public class GetEndpointsTest {
                         .response();
 
         Post post = response.getBody().as(Post.class);
+        assertThat(post.getId()).isNotZero();
         assertThat(post.getUserId()).isEqualTo(1);
         assertThat(post.getTitle()).isNotNull();
         assertThat(post.getBody()).isNotNull();
-        assertThat(post.getId()).isNotZero();
     }
 
     @Test
-    public void testGetAllComments() {
+    public void testPostNewPost() {
+        Post post = Post.builder()
+                .userId(1)
+                .title("new post")
+                .body("new post body")
+                .build();
+
         Response response =
-                when()
-                    .get("/comments")
+                given()
+                    .header("Content-Type", "application/json")
+                    .body(post)
+                .when()
+                    .post("/posts")
                 .then()
-                        .assertThat()
-                        .statusCode(200)
-                        .extract()
-                        .response();
+                    .statusCode(201)
+                    .extract()
+                    .response();
+
+        Post newPost = response.getBody().as(Post.class);
+        assertThat(newPost.getId()).isNotZero();
+        assertThat(newPost.getUserId()).isEqualTo(post.getUserId());
+        assertThat(newPost.getTitle()).isEqualTo(post.getTitle());
+        assertThat(newPost.getBody()).isEqualTo(post.getBody());
     }
 }
