@@ -20,9 +20,13 @@ public class GetEndpointsTest {
     @Test
     public void testGetAllPosts() {
         Response response =
-                when().get("/posts")
-                        .then().assertThat().statusCode(200)
-                        .extract().response();
+                when()
+                        .get("/posts")
+                .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract()
+                        .response();
 
         int totalPosts = response.jsonPath().getList("$").size();
         assertThat(totalPosts).isEqualTo(100);
@@ -31,9 +35,13 @@ public class GetEndpointsTest {
     @Test
     public void testGetPost() {
         Response response =
-                when().get("/posts/1")
-                        .then().assertThat().statusCode(200)
-                        .extract().response();
+                when()
+                    .get("/posts/1")
+                .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract()
+                        .response();
 
         Post post = response.getBody().as(Post.class);
         assertThat(post.getUserId()).isEqualTo(1);
@@ -45,10 +53,12 @@ public class GetEndpointsTest {
     @Test
     public void testGetAllComments() {
         Response response =
-                when().get("/comments")
-                        .then().assertThat().statusCode(200)
-                        .extract().response();
-
-
+                when()
+                    .get("/comments")
+                .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract()
+                        .response();
     }
 }
