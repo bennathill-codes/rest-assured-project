@@ -13,7 +13,6 @@ import static com.jsonplaceholder.test.utils.TestHelpers.postBuilder;
 import static com.jsonplaceholder.test.utils.TestHelpers.createNewPost;
 
 public class PostsTest {
-
     @BeforeClass
     public static void setUp() {
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
