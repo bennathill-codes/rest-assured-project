@@ -52,6 +52,20 @@ public class PostsTest {
     }
 
     @Test
+    public void testGetPostComments() {
+        Response response = when()
+                    .get("/posts/1/comments")
+                .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        int totalPostComments = response.jsonPath().getList("$").size();
+        assertThat(totalPostComments).isEqualTo(5);
+    }
+
+    @Test
     public void testCreateNewPost() {
         Post post = postBuilder(1, 1,"new post", "new post body");
 

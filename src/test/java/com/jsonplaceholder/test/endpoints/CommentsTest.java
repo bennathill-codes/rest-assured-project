@@ -15,9 +15,10 @@ public class CommentsTest {
     }
 
     @Test
-    public void testGetAllCommentsOnPost() {
-        Response response = when()
-                    .get("/posts/1/comments")
+    public void testGetAllComments() {
+        Response response =
+                when()
+                    .get("/comments")
                 .then()
                     .assertThat()
                     .statusCode(200)
@@ -25,6 +26,21 @@ public class CommentsTest {
                     .response();
 
         int totalComments = response.jsonPath().getList("$").size();
-        assertThat(totalComments).isEqualTo(5);
+        assertThat(totalComments).isEqualTo(500);
+    }
+
+    @Test
+    public void testGetAllCommentsOnPost() {
+        Response response =
+                when()
+                    .get("/comments?postId=1")
+                .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        int totalPostComments = response.jsonPath().getList("$").size();
+        assertThat(totalPostComments).isEqualTo(5);
     }
 }
