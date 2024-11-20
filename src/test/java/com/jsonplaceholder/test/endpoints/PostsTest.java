@@ -1,7 +1,6 @@
 package com.jsonplaceholder.test.endpoints;
 
 import com.jsonplaceholder.test.data.Post;
-import com.jsonplaceholder.test.utils.TestHelpers;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.BeforeClass;
@@ -10,6 +9,8 @@ import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static com.jsonplaceholder.test.utils.TestHelpers.postBuilder;
+import static com.jsonplaceholder.test.utils.TestHelpers.createNewPost;
 
 public class PostsTest {
 
@@ -53,7 +54,7 @@ public class PostsTest {
 
     @Test
     public void testCreateNewPost() {
-        Post post = TestHelpers.postBuilder(1, "new post", "new post body");
+        Post post = postBuilder(1, 1,"new post", "new post body");
 
         Response response =
                 given()
@@ -74,8 +75,30 @@ public class PostsTest {
     }
 
     @Test
+    public void testPutPost() {
+        Post post = postBuilder(1, 1, "put post", "put post body");
+
+        Response response =
+                given()
+                    .header("Content-Type", "application/json")
+                    .body(post)
+                .when()
+                    .put("posts/100")
+                .then()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        Post putPost = response.getBody().as(Post.class);
+        assertThat(putPost.getId()).isEqualTo(100);
+        assertThat(putPost.getUserId()).isEqualTo(post.getUserId());
+        assertThat(putPost.getTitle()).isEqualTo(post.getTitle());
+        assertThat(putPost.getBody()).isEqualTo(post.getBody());
+    }
+
+    @Test
     public void testPatchPost() {
-        Post post = TestHelpers.postBuilder(1,1, "patch post", "patch post body");
+        Post post = postBuilder(1,1, "patch post", "patch body");
 
         Response response =
                 given()
@@ -93,5 +116,28 @@ public class PostsTest {
         assertThat(patchPost.getUserId()).isEqualTo(post.getUserId());
         assertThat(patchPost.getTitle()).isEqualTo(post.getTitle());
         assertThat(patchPost.getBody()).isEqualTo(post.getBody());
+    }
+
+    @Test
+    public void testDeletePost() {
+        Post newPost = postBuilder(1001, 1001, "to be deleted post", "to be deleted post body");
+        createNewPost(newPost);
+
+        Response response =
+                given()
+                    .header("Content-Type", "application/json")
+                .when()
+                    .delete("/posts/" + newPost.getId())
+                .then()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        Post deletePost = response.getBody().as(Post.class);
+        assertThat(deletePost.getId()).isNull();
+        assertThat(deletePost.getUserId()).isNull();
+        assertThat(deletePost.getTitle()).isNull();
+        assertThat(deletePost.getBody()).isNull();
+
     }
 }
