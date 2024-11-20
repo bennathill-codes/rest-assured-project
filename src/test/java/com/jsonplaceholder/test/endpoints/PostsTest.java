@@ -13,7 +13,6 @@ import static com.jsonplaceholder.test.utils.TestHelpers.postBuilder;
 import static com.jsonplaceholder.test.utils.TestHelpers.createNewPost;
 
 public class PostsTest {
-
     @BeforeClass
     public static void setUp() {
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
@@ -50,6 +49,20 @@ public class PostsTest {
         assertThat(post.getUserId()).isEqualTo(1);
         assertThat(post.getTitle()).isNotNull();
         assertThat(post.getBody()).isNotNull();
+    }
+
+    @Test
+    public void testGetPostComments() {
+        Response response = when()
+                    .get("/posts/1/comments")
+                .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+
+        int totalPostComments = response.jsonPath().getList("$").size();
+        assertThat(totalPostComments).isEqualTo(5);
     }
 
     @Test
