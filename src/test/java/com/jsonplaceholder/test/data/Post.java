@@ -5,10 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Post
-{
-    private int id;
+public class Post {
+    private Integer id;
     private String title;
     private String body;
-    private int userId;
+    private Integer userId;
 }
