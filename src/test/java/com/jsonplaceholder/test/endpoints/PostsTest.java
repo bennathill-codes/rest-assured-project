@@ -23,12 +23,12 @@ public class PostsTest {
     public void testGetAllPosts() {
         Response response =
                 when()
-                        .get("/posts")
+                    .get("/posts")
                 .then()
-                        .assertThat()
-                        .statusCode(200)
-                        .extract()
-                        .response();
+                    .assertThat()
+                    .statusCode(200)
+                    .extract()
+                    .response();
 
         int totalPosts = response.jsonPath().getList("$").size();
         assertThat(totalPosts).isEqualTo(100);
@@ -40,10 +40,10 @@ public class PostsTest {
                 when()
                     .get("/posts/1")
                 .then()
-                        .assertThat()
-                        .statusCode(200)
-                        .extract()
-                        .response();
+                    .assertThat()
+                    .statusCode(200)
+                    .extract()
+                    .response();
 
         Post post = response.getBody().as(Post.class);
         assertThat(post.getId()).isNotZero();
@@ -138,6 +138,5 @@ public class PostsTest {
         assertThat(deletePost.getUserId()).isNull();
         assertThat(deletePost.getTitle()).isNull();
         assertThat(deletePost.getBody()).isNull();
-
     }
 }
